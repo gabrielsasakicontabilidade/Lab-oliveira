@@ -12,6 +12,8 @@ import { SegmentedControl } from '@/components/SegmentedControl';
 import { CampoData } from '@/components/CampoData';
 import { SeletorCliente } from '@/components/SeletorCliente';
 import { alertar } from '@/components/AlertaGlobal';
+import { Botao } from '@/components/Botao';
+import { cores, espacamento, raio, larguraMaximaTela } from '@/constants/theme';
 import { StatusTrabalho } from '@/types';
 
 const STATUS_OPCOES: StatusTrabalho[] = ['Iniciar', 'Em Produção', 'Finalizado'];
@@ -56,7 +58,7 @@ export default function DetalheTrabalhoScreen() {
       headerRight: () =>
         trabalho && !trabalho.fechado ? (
           <TouchableOpacity onPress={confirmarExclusao}>
-            <Ionicons name="trash-outline" size={22} color="#FF3B30" />
+            <Ionicons name="trash-outline" size={22} color={cores.perigo} />
           </TouchableOpacity>
         ) : null,
     });
@@ -108,7 +110,7 @@ export default function DetalheTrabalhoScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, gap: 20 }}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
       <View>
         <Text style={styles.rotulo}>Descrição</Text>
         <TextInput
@@ -160,10 +162,12 @@ export default function DetalheTrabalhoScreen() {
       </View>
 
       {trabalho.status === 'Finalizado' && (
-        <TouchableOpacity style={styles.botaoSecundario} onPress={() => gerarECompartilharRecibo(trabalho)}>
-          <Ionicons name="document-text-outline" size={18} color="#007AFF" />
-          <Text style={styles.botaoSecundarioTexto}>Gerar/Compartilhar recibo PDF</Text>
-        </TouchableOpacity>
+        <Botao
+          texto="Gerar/Compartilhar recibo PDF"
+          icone="document-text-outline"
+          variante="secundario"
+          onPress={() => gerarECompartilharRecibo(trabalho)}
+        />
       )}
 
       {trabalho.fechado && (
@@ -176,21 +180,11 @@ export default function DetalheTrabalhoScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  rotulo: { fontSize: 13, color: '#666', marginBottom: 6 },
-  campo: { borderWidth: 1, borderColor: '#D1D1D6', borderRadius: 10, padding: 12, fontSize: 16 },
+  container: { flex: 1, backgroundColor: cores.fundo },
+  conteudo: { padding: espacamento.md, gap: espacamento.lg, maxWidth: larguraMaximaTela, width: '100%', alignSelf: 'center' },
+  rotulo: { fontSize: 13, color: cores.textoSecundario, marginBottom: 6 },
+  campo: { borderWidth: 1, borderColor: cores.borda, borderRadius: raio.md, padding: 12, fontSize: 16, color: cores.texto },
   campoMultilinha: { minHeight: 70, textAlignVertical: 'top' },
-  botaoSecundario: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#007AFF',
-    borderRadius: 10,
-    padding: 12,
-  },
-  botaoSecundarioTexto: { color: '#007AFF', fontWeight: '600' },
-  aviso: { color: '#999', fontSize: 13, textAlign: 'center' },
-  vazio: { textAlign: 'center', color: '#999', marginTop: 40 },
+  aviso: { color: cores.textoSecundario, fontSize: 13, textAlign: 'center' },
+  vazio: { textAlign: 'center', color: cores.textoSecundario, marginTop: 40 },
 });

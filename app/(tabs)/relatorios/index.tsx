@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { CampoData } from '@/components/CampoData';
 import { TipoRelatorio } from '@/services/relatorios';
 import { inicioDoDia, fimDoDia } from '@/utils/date';
+import { cores, espacamento, raio, sombra, larguraMaximaTela } from '@/constants/theme';
 
 const TIPOS: { tipo: TipoRelatorio; titulo: string; icone: keyof typeof Ionicons.glyphMap }[] = [
   { tipo: 'producao-periodo', titulo: 'Produção por período', icone: 'bar-chart-outline' },
@@ -33,7 +34,7 @@ export default function RelatoriosScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, gap: 20 }}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
       <View style={styles.periodoContainer}>
         <View style={{ flex: 1 }}>
           <CampoData rotulo="De" valor={dataInicio} aoMudar={setDataInicio} />
@@ -50,7 +51,9 @@ export default function RelatoriosScreen() {
       <View style={styles.grade}>
         {TIPOS.map((item) => (
           <TouchableOpacity key={item.tipo} style={styles.card} onPress={() => abrirRelatorio(item.tipo)}>
-            <Ionicons name={item.icone} size={26} color="#007AFF" />
+            <View style={styles.cardIconeCirculo}>
+              <Ionicons name={item.icone} size={22} color={cores.primaria} />
+            </View>
             <Text style={styles.cardTexto}>{item.titulo}</Text>
           </TouchableOpacity>
         ))}
@@ -60,17 +63,33 @@ export default function RelatoriosScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  periodoContainer: { flexDirection: 'row', gap: 12 },
-  aviso: { color: '#999', fontSize: 12 },
-  grade: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
+  container: { flex: 1, backgroundColor: cores.fundoTela },
+  conteudo: {
+    padding: espacamento.md,
+    gap: espacamento.lg,
+    maxWidth: larguraMaximaTela,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  periodoContainer: { flexDirection: 'row', gap: espacamento.sm + 4 },
+  aviso: { color: cores.textoSecundario, fontSize: 12 },
+  grade: { flexDirection: 'row', flexWrap: 'wrap', gap: espacamento.sm + 4 },
   card: {
     width: '47%',
-    backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.md,
     padding: 16,
     gap: 10,
     alignItems: 'flex-start',
+    ...sombra,
   },
-  cardTexto: { fontSize: 14, fontWeight: '600' },
+  cardIconeCirculo: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: cores.primariaClara,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardTexto: { fontSize: 14, fontWeight: '600', color: cores.texto },
 });

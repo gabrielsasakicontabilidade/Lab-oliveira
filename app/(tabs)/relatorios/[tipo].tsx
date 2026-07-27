@@ -1,11 +1,12 @@
 import { useMemo, useLayoutEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { useTrabalhos } from '@/hooks/useTrabalhos';
 import { calcularRelatorio, TipoRelatorio } from '@/services/relatorios';
 import { gerarECompartilharRelatorio } from '@/services/pdf';
 import { formatarDataCurta } from '@/utils/date';
+import { Botao } from '@/components/Botao';
+import { cores, espacamento, raio, sombra, larguraMaximaTela } from '@/constants/theme';
 
 export default function RelatorioScreen() {
   const { tipo, inicio, fim } = useLocalSearchParams<{ tipo: TipoRelatorio; inicio: string; fim: string }>();
@@ -35,7 +36,7 @@ export default function RelatorioScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, gap: 20 }}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
       <Text style={styles.periodo}>
         {formatarDataCurta(dataInicio)} até {formatarDataCurta(dataFim)}
       </Text>
@@ -50,7 +51,7 @@ export default function RelatorioScreen() {
       </View>
 
       {resultado.linhas.length > 0 ? (
-        <View style={{ gap: 8 }}>
+        <View style={{ gap: espacamento.sm }}>
           {resultado.linhas.map((linha, indice) => (
             <View key={indice} style={styles.linha}>
               <View style={{ flex: 1 }}>
@@ -65,47 +66,48 @@ export default function RelatorioScreen() {
         <Text style={styles.vazio}>{resultado.linhasVazioTexto}</Text>
       ) : null}
 
-      <TouchableOpacity style={styles.botaoPdf} onPress={gerarPDF} disabled={gerando}>
-        <Ionicons name="document-text-outline" size={18} color="#fff" />
-        <Text style={styles.botaoPdfTexto}>{gerando ? 'Gerando...' : 'Gerar Relatório (PDF)'}</Text>
-      </TouchableOpacity>
+      <Botao
+        texto={gerando ? 'Gerando...' : 'Gerar Relatório (PDF)'}
+        icone="document-text-outline"
+        onPress={gerarPDF}
+        carregando={gerando}
+      />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  periodo: { color: '#666', fontSize: 13 },
-  resumoContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  container: { flex: 1, backgroundColor: cores.fundoTela },
+  conteudo: {
+    padding: espacamento.md,
+    gap: espacamento.lg,
+    maxWidth: larguraMaximaTela,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  periodo: { color: cores.textoSecundario, fontSize: 13 },
+  resumoContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: espacamento.sm + 2 },
   resumoCard: {
     flex: 1,
     minWidth: '30%',
-    backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.md,
     padding: 14,
     alignItems: 'center',
+    ...sombra,
   },
-  resumoValor: { fontSize: 18, fontWeight: '700' },
-  resumoRotulo: { fontSize: 11, color: '#666', marginTop: 4, textAlign: 'center' },
+  resumoValor: { fontSize: 18, fontWeight: '700', color: cores.texto },
+  resumoRotulo: { fontSize: 11, color: cores.textoSecundario, marginTop: 4, textAlign: 'center' },
   linha: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#F2F2F7',
-    borderRadius: 10,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.sm + 2,
     padding: 12,
+    ...sombra,
   },
-  linhaPrincipal: { fontWeight: '600', fontSize: 14 },
-  linhaSecundario: { color: '#666', fontSize: 12, marginTop: 2 },
-  linhaValor: { fontWeight: '700', fontSize: 14 },
-  vazio: { textAlign: 'center', color: '#999', marginTop: 20 },
-  botaoPdf: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    padding: 14,
-  },
-  botaoPdfTexto: { color: '#fff', fontWeight: '700' },
+  linhaPrincipal: { fontWeight: '600', fontSize: 14, color: cores.texto },
+  linhaSecundario: { color: cores.textoSecundario, fontSize: 12, marginTop: 2 },
+  linhaValor: { fontWeight: '700', fontSize: 14, color: cores.texto },
+  vazio: { textAlign: 'center', color: cores.textoSecundario, marginTop: 20 },
 });

@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { cores, raio, sombra } from '@/constants/theme';
 
 interface Props<T extends string> {
   opcoes: T[];
@@ -30,25 +31,28 @@ export function SegmentedControl<T extends string>({ opcoes, valor, aoMudar }: P
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#E5E5EA',
-    borderRadius: 9,
+    backgroundColor: cores.neutroClaro,
+    borderRadius: raio.sm + 1,
     padding: 2,
   },
   opcao: {
     flex: 1,
     paddingVertical: 6,
     paddingHorizontal: 4,
-    borderRadius: 7,
+    borderRadius: raio.sm,
     alignItems: 'center',
   },
   opcaoSelecionada: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: cores.fundo,
+    ...sombra,
+    shadowOpacity: 0.08,
   },
   texto: {
     fontSize: 12,
-    color: '#000',
+    color: cores.textoSecundario,
   },
   textoSelecionado: {
-    fontWeight: '600',
+    fontWeight: '700',
+    color: cores.primaria,
   },
 });

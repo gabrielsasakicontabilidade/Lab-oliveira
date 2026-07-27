@@ -12,6 +12,8 @@ import { formatarMoeda } from '@/utils/currency';
 import { nomeMesAno } from '@/utils/date';
 import { ArquivosCliente } from '@/components/ArquivosCliente';
 import { alertar } from '@/components/AlertaGlobal';
+import { Botao } from '@/components/Botao';
+import { cores, espacamento, raio, sombra, larguraMaximaTela } from '@/constants/theme';
 
 export default function DetalheClienteScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -68,7 +70,7 @@ export default function DetalheClienteScreen() {
       title: cliente?.nome ?? 'Cliente',
       headerRight: () => (
         <TouchableOpacity onPress={abrirMenu}>
-          <Ionicons name="ellipsis-horizontal-circle-outline" size={24} color="#007AFF" />
+          <Ionicons name="ellipsis-horizontal-circle-outline" size={24} color={cores.primaria} />
         </TouchableOpacity>
       ),
     });
@@ -105,12 +107,12 @@ export default function DetalheClienteScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, gap: 20 }}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
       {(cliente.telefone || cliente.email) && (
         <View style={styles.secao}>
           <Text style={styles.tituloSecao}>Contato</Text>
-          {cliente.telefone ? <Text>Telefone: {cliente.telefone}</Text> : null}
-          {cliente.email ? <Text>E-mail: {cliente.email}</Text> : null}
+          {cliente.telefone ? <Text style={styles.textoContato}>Telefone: {cliente.telefone}</Text> : null}
+          {cliente.email ? <Text style={styles.textoContato}>E-mail: {cliente.email}</Text> : null}
         </View>
       )}
 
@@ -122,7 +124,7 @@ export default function DetalheClienteScreen() {
           <>
             {trabalhosEmAberto.map((t) => (
               <View key={t.id} style={styles.linhaTrabalho}>
-                <Text style={{ flex: 1 }}>{t.descricao}</Text>
+                <Text style={{ flex: 1, color: cores.texto }}>{t.descricao}</Text>
                 <Text style={styles.valor}>{formatarMoeda(t.valor)}</Text>
               </View>
             ))}
@@ -135,15 +137,18 @@ export default function DetalheClienteScreen() {
       </View>
 
       {trabalhosEmAberto.length > 0 && (
-        <TouchableOpacity style={styles.botaoPrimario} onPress={aoFecharMes} disabled={fechandoMes}>
-          <Ionicons name="checkmark-circle-outline" size={18} color="#fff" />
-          <Text style={styles.botaoPrimarioTexto}>
-            {fechandoMes ? 'Fechando...' : `Fechar mês (${trabalhosEmAberto.length} trabalhos)`}
-          </Text>
-        </TouchableOpacity>
+        <Botao
+          texto={fechandoMes ? 'Fechando...' : `Fechar mês (${trabalhosEmAberto.length} trabalhos)`}
+          icone="checkmark-circle-outline"
+          onPress={aoFecharMes}
+          carregando={fechandoMes}
+          style={{ backgroundColor: cores.sucesso }}
+        />
       )}
 
-      <ArquivosCliente clienteId={cliente.id} />
+      <View style={styles.secao}>
+        <ArquivosCliente clienteId={cliente.id} />
+      </View>
 
       <View style={styles.secao}>
         <Text style={styles.tituloSecao}>Histórico de fechamentos</Text>
@@ -158,7 +163,7 @@ export default function DetalheClienteScreen() {
                 style={styles.linhaTrabalho}
                 onPress={() => gerarECompartilharFechamento(f, trabalhosDoFechamento)}
               >
-                <Text style={{ flex: 1 }}>{nomeMesAno(f.mesReferencia, f.anoReferencia)}</Text>
+                <Text style={{ flex: 1, color: cores.texto }}>{nomeMesAno(f.mesReferencia, f.anoReferencia)}</Text>
                 <Text style={styles.valor}>{formatarMoeda(f.valorTotal)}</Text>
               </TouchableOpacity>
             );
@@ -170,29 +175,33 @@ export default function DetalheClienteScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  secao: { gap: 8 },
-  tituloSecao: { fontSize: 13, fontWeight: '700', color: '#666', textTransform: 'uppercase' },
-  vazioSecao: { color: '#999' },
+  container: { flex: 1, backgroundColor: cores.fundoTela },
+  conteudo: {
+    padding: espacamento.md,
+    gap: espacamento.md,
+    maxWidth: larguraMaximaTela,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  secao: {
+    gap: 8,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.md,
+    padding: espacamento.md,
+    ...sombra,
+  },
+  tituloSecao: { fontSize: 13, fontWeight: '700', color: cores.textoSecundario, textTransform: 'uppercase' },
+  textoContato: { color: cores.texto },
+  vazioSecao: { color: cores.textoSecundario },
   linhaTrabalho: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#D1D1D6',
+    borderColor: cores.borda,
   },
   linhaTotal: { borderBottomWidth: 0, marginTop: 4 },
-  totalTexto: { fontWeight: '700' },
-  valor: { fontWeight: '600' },
-  botaoPrimario: {
-    flexDirection: 'row',
-    gap: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#34C759',
-    borderRadius: 10,
-    padding: 14,
-  },
-  botaoPrimarioTexto: { color: '#fff', fontWeight: '700' },
-  vazio: { textAlign: 'center', color: '#999', marginTop: 40 },
+  totalTexto: { fontWeight: '700', color: cores.texto },
+  valor: { fontWeight: '600', color: cores.texto },
+  vazio: { textAlign: 'center', color: cores.textoSecundario, marginTop: 40 },
 });

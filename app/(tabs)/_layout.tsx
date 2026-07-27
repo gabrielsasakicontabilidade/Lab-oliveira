@@ -1,9 +1,17 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { cores } from '@/constants/theme';
 
 export default function TabsLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: '#007AFF' }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: cores.primaria,
+        tabBarInactiveTintColor: cores.neutro,
+        tabBarStyle: { borderTopColor: cores.borda },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -15,7 +23,6 @@ export default function TabsLayout() {
         name="trabalhos"
         options={{
           title: 'Trabalhos',
-          headerShown: false,
           tabBarIcon: ({ color, size }) => <Ionicons name="clipboard" color={color} size={size} />,
         }}
       />
@@ -23,7 +30,6 @@ export default function TabsLayout() {
         name="clientes"
         options={{
           title: 'Clientes',
-          headerShown: false,
           tabBarIcon: ({ color, size }) => <Ionicons name="people" color={color} size={size} />,
         }}
       />
@@ -31,7 +37,6 @@ export default function TabsLayout() {
         name="relatorios"
         options={{
           title: 'Relatórios',
-          headerShown: false,
           tabBarIcon: ({ color, size }) => <Ionicons name="stats-chart" color={color} size={size} />,
         }}
       />

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet, Platform, Alert as AlertNativo } from 'react-native';
+import { cores, raio, sombra } from '@/constants/theme';
 
 interface BotaoAlerta {
   text: string;
@@ -63,12 +64,12 @@ export function AlertaGlobalProvider() {
 }
 
 const styles = StyleSheet.create({
-  fundo: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center', alignItems: 'center', padding: 24 },
-  caixa: { backgroundColor: '#fff', borderRadius: 14, padding: 20, width: '100%', maxWidth: 340, gap: 8 },
-  titulo: { fontSize: 16, fontWeight: '700', textAlign: 'center' },
-  mensagem: { fontSize: 14, color: '#444', textAlign: 'center', marginTop: 4 },
+  fundo: { flex: 1, backgroundColor: 'rgba(10,14,25,0.5)', justifyContent: 'center', alignItems: 'center', padding: 24 },
+  caixa: { backgroundColor: cores.fundo, borderRadius: raio.lg, padding: 20, width: '100%', maxWidth: 340, gap: 8, ...sombra },
+  titulo: { fontSize: 16, fontWeight: '700', textAlign: 'center', color: cores.texto },
+  mensagem: { fontSize: 14, color: cores.textoSecundario, textAlign: 'center', marginTop: 4 },
   botoes: { marginTop: 16, gap: 4 },
-  botao: { paddingVertical: 12, alignItems: 'center', borderTopWidth: StyleSheet.hairlineWidth, borderColor: '#ddd' },
-  botaoTexto: { color: '#007AFF', fontSize: 16, fontWeight: '600' },
-  destrutivo: { color: '#FF3B30' },
+  botao: { paddingVertical: 12, alignItems: 'center', borderTopWidth: StyleSheet.hairlineWidth, borderColor: cores.borda },
+  botaoTexto: { color: cores.primaria, fontSize: 16, fontWeight: '600' },
+  destrutivo: { color: cores.perigo },
 });

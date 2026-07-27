@@ -1,16 +1,9 @@
 import { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
-} from 'react-native';
+import { View, Text, TextInput, KeyboardAvoidingView, Platform, Image, StyleSheet } from 'react-native';
 import { useAuth } from '@/context/AuthContext';
 import { alertar } from '@/components/AlertaGlobal';
+import { Botao } from '@/components/Botao';
+import { cores, espacamento, raio, sombra } from '@/constants/theme';
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -34,52 +27,70 @@ export default function LoginScreen() {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <Image source={require('@/assets/images/logo-oliveira.png')} style={styles.logo} resizeMode="contain" />
-      <Text style={styles.subtitulo}>Controle de trabalhos e faturamento</Text>
+    <KeyboardAvoidingView style={styles.fundo} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.cartao}>
+        <Image source={require('@/assets/images/logo-oliveira.png')} style={styles.logo} resizeMode="contain" />
+        <Text style={styles.subtitulo}>Controle de trabalhos e faturamento</Text>
 
-      <TextInput
-        style={styles.campo}
-        placeholder="E-mail"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.campo}
-        placeholder="Senha"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
+        <View style={styles.campos}>
+          <TextInput
+            style={styles.campo}
+            placeholder="E-mail"
+            placeholderTextColor={cores.textoSecundario}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <TextInput
+            style={styles.campo}
+            placeholder="Senha"
+            placeholderTextColor={cores.textoSecundario}
+            secureTextEntry
+            value={senha}
+            onChangeText={setSenha}
+          />
+        </View>
 
-      <TouchableOpacity style={styles.botao} onPress={entrar} disabled={carregando}>
-        <Text style={styles.botaoTexto}>{carregando ? 'Entrando...' : 'Entrar'}</Text>
-      </TouchableOpacity>
+        <Botao
+          texto="Entrar"
+          onPress={entrar}
+          carregando={carregando}
+          style={{ width: '100%', marginTop: espacamento.sm }}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24, gap: 12 },
+  fundo: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: espacamento.lg,
+    backgroundColor: cores.fundoTela,
+  },
+  cartao: {
+    width: '100%',
+    maxWidth: 400,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.xl,
+    padding: espacamento.xl,
+    alignItems: 'center',
+    ...sombra,
+  },
   logo: { width: 220, height: 71, marginBottom: 4 },
-  subtitulo: { color: '#666', marginBottom: 24 },
+  subtitulo: { color: cores.textoSecundario, marginBottom: espacamento.lg, textAlign: 'center' },
+  campos: { width: '100%', gap: espacamento.sm },
   campo: {
     width: '100%',
     borderWidth: 1,
-    borderColor: '#D1D1D6',
-    borderRadius: 10,
+    borderColor: cores.borda,
+    backgroundColor: cores.fundoTela,
+    borderRadius: raio.md,
     padding: 12,
     fontSize: 16,
+    color: cores.texto,
   },
-  botao: {
-    width: '100%',
-    backgroundColor: '#007AFF',
-    borderRadius: 10,
-    padding: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  botaoTexto: { color: '#fff', fontWeight: '700', fontSize: 16 },
 });

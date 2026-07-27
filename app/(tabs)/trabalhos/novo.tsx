@@ -7,6 +7,7 @@ import { paraNumero } from '@/utils/currency';
 import { CampoData } from '@/components/CampoData';
 import { SeletorCliente } from '@/components/SeletorCliente';
 import { alertar } from '@/components/AlertaGlobal';
+import { cores, espacamento, raio, larguraMaximaTela } from '@/constants/theme';
 
 export default function NovoTrabalhoScreen() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function NovoTrabalhoScreen() {
   });
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 16, gap: 16 }}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.conteudo}>
       <View>
         <Text style={styles.rotulo}>Descrição do trabalho</Text>
         <TextInput
@@ -109,18 +110,20 @@ export default function NovoTrabalhoScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  rotulo: { fontSize: 13, color: '#666', marginBottom: 6 },
+  container: { flex: 1, backgroundColor: cores.fundo },
+  conteudo: { padding: espacamento.md, gap: espacamento.md, maxWidth: larguraMaximaTela, width: '100%', alignSelf: 'center' },
+  rotulo: { fontSize: 13, color: cores.textoSecundario, marginBottom: 6 },
   campo: {
     borderWidth: 1,
-    borderColor: '#D1D1D6',
-    borderRadius: 10,
+    borderColor: cores.borda,
+    borderRadius: raio.md,
     padding: 12,
     fontSize: 16,
+    color: cores.texto,
   },
   campoMultilinha: { minHeight: 80, textAlignVertical: 'top' },
-  aviso: { color: '#999', fontSize: 12, marginTop: 6 },
-  cancelar: { color: '#007AFF', fontSize: 16 },
-  salvar: { color: '#007AFF', fontSize: 16, fontWeight: '700' },
-  desabilitado: { color: '#C7C7CC' },
+  aviso: { color: cores.textoSecundario, fontSize: 12, marginTop: 6 },
+  cancelar: { color: cores.primaria, fontSize: 16 },
+  salvar: { color: cores.primaria, fontSize: 16, fontWeight: '700' },
+  desabilitado: { color: cores.borda },
 });

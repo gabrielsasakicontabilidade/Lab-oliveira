@@ -3,6 +3,8 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native
 import { useRouter, useNavigation } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useClientes } from '@/hooks/useClientes';
+import { EstadoVazio } from '@/components/EstadoVazio';
+import { cores, espacamento, raio, sombra, larguraMaximaTela } from '@/constants/theme';
 
 export default function ListaClientesScreen() {
   const router = useRouter();
@@ -13,7 +15,7 @@ export default function ListaClientesScreen() {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => router.push('/clientes/novo')} style={{ paddingHorizontal: 8 }}>
-          <Ionicons name="add" size={26} color="#007AFF" />
+          <Ionicons name="add" size={26} color={cores.primaria} />
         </TouchableOpacity>
       ),
     });
@@ -24,23 +26,54 @@ export default function ListaClientesScreen() {
       <FlatList
         data={clientes}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16, gap: 10 }}
+        contentContainerStyle={styles.lista}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.linha} onPress={() => router.push(`/clientes/${item.id}`)}>
-            <Text style={styles.nome}>{item.nome}</Text>
-            <Text style={styles.tipo}>{item.tipo}</Text>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarTexto}>{item.nome.charAt(0).toUpperCase()}</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.nome}>{item.nome}</Text>
+              <Text style={styles.tipo}>{item.tipo}</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={cores.borda} />
           </TouchableOpacity>
         )}
-        ListEmptyComponent={!carregando ? <Text style={styles.vazio}>Nenhum cliente ainda.</Text> : null}
+        ListEmptyComponent={
+          !carregando ? <EstadoVazio icone="people-outline" texto="Nenhum cliente ainda." /> : null
+        }
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  linha: { backgroundColor: '#F2F2F7', borderRadius: 12, padding: 14, gap: 2 },
-  nome: { fontSize: 16, fontWeight: '600' },
-  tipo: { color: '#666' },
-  vazio: { textAlign: 'center', color: '#999', marginTop: 40 },
+  container: { flex: 1, backgroundColor: cores.fundoTela },
+  lista: {
+    padding: espacamento.md,
+    gap: espacamento.sm,
+    maxWidth: larguraMaximaTela,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  linha: {
+    backgroundColor: cores.fundo,
+    borderRadius: raio.md,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: espacamento.sm + 2,
+    ...sombra,
+  },
+  avatar: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: cores.primariaClara,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarTexto: { color: cores.primaria, fontWeight: '700', fontSize: 16 },
+  nome: { fontSize: 16, fontWeight: '600', color: cores.texto },
+  tipo: { color: cores.textoSecundario, fontSize: 13, marginTop: 1 },
 });

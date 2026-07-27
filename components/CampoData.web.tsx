@@ -1,5 +1,6 @@
 import type { CSSProperties, ChangeEvent } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { cores, raio } from '@/constants/theme';
 
 interface Props {
   rotulo: string;
@@ -32,16 +33,16 @@ export function CampoData({ rotulo, valor, aoMudar }: Props) {
 }
 
 const estiloInput: CSSProperties = {
-  border: '1px solid #D1D1D6',
-  borderRadius: 10,
+  border: `1px solid ${cores.borda}`,
+  borderRadius: raio.md,
   padding: 12,
   fontSize: 16,
   width: '100%',
   boxSizing: 'border-box',
   fontFamily: 'inherit',
-  color: '#000',
+  color: cores.texto,
 };
 
 const styles = StyleSheet.create({
-  rotulo: { fontSize: 13, color: '#666', marginBottom: 6 },
+  rotulo: { fontSize: 13, color: cores.textoSecundario, marginBottom: 6 },
 });

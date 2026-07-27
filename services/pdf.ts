@@ -13,19 +13,20 @@ function baseHTML(conteudo: string) {
       <head>
         <meta charset="utf-8" />
         <style>
-          body { font-family: -apple-system, Helvetica, Arial, sans-serif; padding: 24px; color: #111; }
-          .cabecalho { text-align: center; margin-bottom: 24px; }
+          body { font-family: -apple-system, Helvetica, Arial, sans-serif; padding: 32px; color: #111318; }
+          .cabecalho { text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 3px solid #0042A5; }
           .cabecalho img { height: 56px; }
-          h1 { font-size: 20px; margin: 16px 0 4px; text-align: center; letter-spacing: 0.5px; }
+          h1 { font-size: 19px; margin: 18px 0 4px; text-align: center; letter-spacing: 0.5px; color: #0042A5; }
           .subtitulo { color: #555; margin-bottom: 20px; line-height: 1.6; }
           table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-          td, th { padding: 8px 4px; border-bottom: 1px solid #ddd; text-align: left; font-size: 13px; }
-          .total { font-size: 16px; font-weight: bold; margin-top: 16px; text-align: right; }
-          .rodape { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
+          td, th { padding: 9px 6px; border-bottom: 1px solid #E3E5EA; text-align: left; font-size: 13px; }
+          th { color: #6B7280; font-size: 11px; text-transform: uppercase; }
+          .total { font-size: 17px; font-weight: bold; margin-top: 16px; text-align: right; color: #0042A5; }
+          .rodape { margin-top: 40px; text-align: center; color: #9AA1AC; font-size: 12px; }
           .resumo { display: flex; gap: 12px; margin-bottom: 20px; }
-          .resumoCard { flex: 1; text-align: center; background: #F2F2F7; border-radius: 8px; padding: 10px; }
-          .resumoValor { font-size: 17px; font-weight: bold; }
-          .resumoRotulo { font-size: 11px; color: #666; margin-top: 2px; }
+          .resumoCard { flex: 1; text-align: center; background: #F4F5F7; border-radius: 10px; padding: 12px; }
+          .resumoValor { font-size: 17px; font-weight: bold; color: #111318; }
+          .resumoRotulo { font-size: 11px; color: #6B7280; margin-top: 2px; }
           .linhaSecundaria { color: #888; font-size: 11px; }
         </style>
       </head>

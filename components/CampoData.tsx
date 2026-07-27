@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { formatarDataCurta } from '@/utils/date';
+import { cores, raio } from '@/constants/theme';
 
 interface Props {
   rotulo: string;
@@ -38,14 +39,14 @@ export function CampoData({ rotulo, valor, aoMudar }: Props) {
 }
 
 const styles = StyleSheet.create({
-  rotulo: { fontSize: 13, color: '#666', marginBottom: 6 },
+  rotulo: { fontSize: 13, color: cores.textoSecundario, marginBottom: 6 },
   campo: {
     borderWidth: 1,
-    borderColor: '#D1D1D6',
-    borderRadius: 10,
+    borderColor: cores.borda,
+    borderRadius: raio.md,
     padding: 12,
   },
-  texto: { fontSize: 16 },
+  texto: { fontSize: 16, color: cores.texto },
   concluirBotao: { alignItems: 'flex-end', paddingVertical: 8 },
-  concluirTexto: { color: '#007AFF', fontWeight: '600', fontSize: 15 },
+  concluirTexto: { color: cores.primaria, fontWeight: '600', fontSize: 15 },
 });

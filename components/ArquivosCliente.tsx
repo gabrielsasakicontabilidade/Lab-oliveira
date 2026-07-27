@@ -15,6 +15,7 @@ import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { useArquivosDoCliente } from '@/hooks/useArquivosDoCliente';
 import { criarArquivo, excluirArquivo } from '@/services/firestore';
 import { alertar } from '@/components/AlertaGlobal';
+import { cores, raio } from '@/constants/theme';
 import { Arquivo } from '@/types';
 
 interface Props {
@@ -98,9 +99,9 @@ export function ArquivosCliente({ clienteId }: Props) {
         <Text style={styles.titulo}>Arquivos</Text>
         <TouchableOpacity onPress={abrirOpcoes} disabled={enviando}>
           {enviando ? (
-            <ActivityIndicator size="small" />
+            <ActivityIndicator size="small" color={cores.primaria} />
           ) : (
-            <Ionicons name="add-circle-outline" size={22} color="#007AFF" />
+            <Ionicons name="add-circle-outline" size={22} color={cores.primaria} />
           )}
         </TouchableOpacity>
       </View>
@@ -149,9 +150,9 @@ export function ArquivosCliente({ clienteId }: Props) {
 
 const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  titulo: { fontSize: 13, fontWeight: '700', color: '#666', textTransform: 'uppercase' },
-  vazio: { color: '#999' },
-  miniatura: { width: 80, height: 80, borderRadius: 10, backgroundColor: '#eee' },
+  titulo: { fontSize: 13, fontWeight: '700', color: cores.textoSecundario, textTransform: 'uppercase' },
+  vazio: { color: cores.textoSecundario },
+  miniatura: { width: 80, height: 80, borderRadius: raio.sm, backgroundColor: cores.neutroClaro },
   fundoModal: { flex: 1, backgroundColor: 'rgba(0,0,0,0.9)', justifyContent: 'center', alignItems: 'center' },
   fecharBotao: { position: 'absolute', top: 60, right: 20, zIndex: 1 },
   imagemGrande: { width: '100%', height: '70%' },
@@ -159,11 +160,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     alignItems: 'center',
-    backgroundColor: '#FF3B30',
-    borderRadius: 10,
+    backgroundColor: cores.perigo,
+    borderRadius: raio.md,
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginTop: 20,
   },
-  excluirTexto: { color: '#fff', fontWeight: '700' },
+  excluirTexto: { color: cores.branco, fontWeight: '700' },
 });

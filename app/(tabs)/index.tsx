@@ -5,7 +5,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTrabalhos } from '@/hooks/useTrabalhos';
 import { useAuth } from '@/context/AuthContext';
 import { StatusBadge } from '@/components/StatusBadge';
+import { EstadoVazio } from '@/components/EstadoVazio';
+import { Botao } from '@/components/Botao';
 import { formatarMoeda } from '@/utils/currency';
+import { cores, espacamento, raio, sombra } from '@/constants/theme';
 
 function saudacao(): string {
   const hora = new Date().getHours();
@@ -55,28 +58,27 @@ export default function InicioScreen() {
           <Text style={styles.receitaRotulo}>Receita do mês</Text>
           <Text style={styles.receitaValor}>{formatarMoeda(receitaMes)}</Text>
         </View>
-        <Ionicons name="stats-chart" size={28} color="#fff" />
+        <View style={styles.receitaIconeCirculo}>
+          <Ionicons name="stats-chart" size={22} color={cores.branco} />
+        </View>
       </View>
 
       <View style={styles.statsContainer}>
-        <View style={[styles.statCard, { backgroundColor: '#8E8E9315' }]}>
-          <Text style={[styles.statNumero, { color: '#8E8E93' }]}>{iniciados}</Text>
+        <View style={[styles.statCard, { backgroundColor: cores.neutroClaro }]}>
+          <Text style={[styles.statNumero, { color: cores.neutro }]}>{iniciados}</Text>
           <Text style={styles.statRotulo}>Iniciados</Text>
         </View>
-        <View style={[styles.statCard, { backgroundColor: '#FF950015' }]}>
-          <Text style={[styles.statNumero, { color: '#FF9500' }]}>{emProducao}</Text>
+        <View style={[styles.statCard, { backgroundColor: cores.atencaoClaro }]}>
+          <Text style={[styles.statNumero, { color: cores.atencao }]}>{emProducao}</Text>
           <Text style={styles.statRotulo}>Em produção</Text>
         </View>
-        <View style={[styles.statCard, { backgroundColor: '#34C75915' }]}>
-          <Text style={[styles.statNumero, { color: '#34C759' }]}>{finalizados}</Text>
+        <View style={[styles.statCard, { backgroundColor: cores.sucessoClaro }]}>
+          <Text style={[styles.statNumero, { color: cores.sucesso }]}>{finalizados}</Text>
           <Text style={styles.statRotulo}>Finalizados</Text>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.botaoNovo} onPress={() => router.push('/trabalhos/novo')}>
-        <Ionicons name="add" size={20} color="#fff" />
-        <Text style={styles.botaoNovoTexto}>Novo Trabalho</Text>
-      </TouchableOpacity>
+      <Botao texto="Novo Trabalho" icone="add" onPress={() => router.push('/trabalhos/novo')} />
 
       <View style={styles.secaoHeader}>
         <Text style={styles.secaoTitulo}>Últimos trabalhos</Text>
@@ -86,9 +88,9 @@ export default function InicioScreen() {
       </View>
 
       {ultimosTrabalhos.length === 0 && !carregando ? (
-        <Text style={styles.vazio}>Nenhum trabalho ainda.</Text>
+        <EstadoVazio icone="clipboard-outline" texto="Nenhum trabalho ainda." />
       ) : (
-        <View style={{ gap: 8 }}>
+        <View style={{ gap: espacamento.sm }}>
           {ultimosTrabalhos.map((t) => (
             <TouchableOpacity key={t.id} style={styles.linha} onPress={() => router.push(`/trabalhos/${t.id}`)}>
               <View style={{ flex: 1 }}>
@@ -108,46 +110,47 @@ export default function InicioScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  conteudo: { padding: 16, gap: 20 },
-  saudacao: { fontSize: 22, fontWeight: '700' },
-  subtitulo: { color: '#666', marginTop: 2 },
+  container: { flex: 1, backgroundColor: cores.fundoTela },
+  conteudo: { padding: espacamento.md, gap: espacamento.lg, maxWidth: 640, width: '100%', alignSelf: 'center' },
+  saudacao: { fontSize: 22, fontWeight: '700', color: cores.texto },
+  subtitulo: { color: cores.textoSecundario, marginTop: 2 },
   cardReceita: {
-    backgroundColor: '#007AFF',
-    borderRadius: 16,
-    padding: 18,
+    backgroundColor: cores.primaria,
+    borderRadius: raio.lg,
+    padding: espacamento.md + 2,
     flexDirection: 'row',
     alignItems: 'center',
+    ...sombra,
+    shadowColor: cores.primariaEscura,
+    shadowOpacity: 0.25,
   },
-  receitaRotulo: { color: '#E5F1FF', fontSize: 13, marginBottom: 4 },
-  receitaValor: { color: '#fff', fontSize: 26, fontWeight: '700' },
-  statsContainer: { flexDirection: 'row', gap: 10 },
-  statCard: { flex: 1, borderRadius: 12, padding: 12, alignItems: 'center' },
-  statNumero: { fontSize: 22, fontWeight: '700' },
-  statRotulo: { fontSize: 12, color: '#666', marginTop: 2 },
-  botaoNovo: {
-    flexDirection: 'row',
-    gap: 8,
+  receitaRotulo: { color: cores.primariaClara, fontSize: 13, marginBottom: 4 },
+  receitaValor: { color: cores.branco, fontSize: 26, fontWeight: '700' },
+  receitaIconeCirculo: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    padding: 14,
   },
-  botaoNovoTexto: { color: '#fff', fontWeight: '700', fontSize: 16 },
+  statsContainer: { flexDirection: 'row', gap: espacamento.sm },
+  statCard: { flex: 1, borderRadius: raio.md, padding: 12, alignItems: 'center' },
+  statNumero: { fontSize: 22, fontWeight: '700' },
+  statRotulo: { fontSize: 12, color: cores.textoSecundario, marginTop: 2 },
   secaoHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  secaoTitulo: { fontSize: 15, fontWeight: '700' },
-  verTodos: { color: '#007AFF', fontSize: 13 },
+  secaoTitulo: { fontSize: 15, fontWeight: '700', color: cores.texto },
+  verTodos: { color: cores.primaria, fontSize: 13, fontWeight: '600' },
   linha: {
-    backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.md,
     padding: 14,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    ...sombra,
   },
-  linhaCliente: { fontWeight: '600', fontSize: 15 },
-  linhaDescricao: { color: '#666', fontSize: 13, marginTop: 2 },
-  linhaValor: { fontWeight: '700', fontSize: 13 },
-  vazio: { textAlign: 'center', color: '#999', marginTop: 12 },
+  linhaCliente: { fontWeight: '600', fontSize: 15, color: cores.texto },
+  linhaDescricao: { color: cores.textoSecundario, fontSize: 13, marginTop: 2 },
+  linhaValor: { fontWeight: '700', fontSize: 13, color: cores.texto },
 });

@@ -7,8 +7,10 @@ import { useTrabalhos } from '@/hooks/useTrabalhos';
 import { atualizarTrabalho } from '@/services/firestore';
 import { StatusBadge } from '@/components/StatusBadge';
 import { SegmentedControl } from '@/components/SegmentedControl';
+import { EstadoVazio } from '@/components/EstadoVazio';
 import { formatarMoeda } from '@/utils/currency';
 import { formatarDataCurta } from '@/utils/date';
+import { cores, espacamento, raio, sombra, larguraMaximaTela } from '@/constants/theme';
 import { StatusTrabalho, Trabalho } from '@/types';
 
 const FILTROS = ['Todos', 'Iniciar', 'Em Produção', 'Finalizado'] as const;
@@ -40,7 +42,7 @@ export default function ListaTrabalhosScreen() {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={() => router.push('/trabalhos/novo')} style={{ paddingHorizontal: 8 }}>
-          <Ionicons name="add" size={26} color="#007AFF" />
+          <Ionicons name="add" size={26} color={cores.primaria} />
         </TouchableOpacity>
       ),
     });
@@ -59,7 +61,7 @@ export default function ListaTrabalhosScreen() {
       <FlatList
         data={trabalhosFiltrados}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 16, gap: 10 }}
+        contentContainerStyle={styles.lista}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.linha} onPress={() => router.push(`/trabalhos/${item.id}`)}>
             <View style={styles.topo}>
@@ -72,7 +74,7 @@ export default function ListaTrabalhosScreen() {
                     hitSlop={8}
                     style={styles.avancarBotao}
                   >
-                    <Ionicons name="arrow-forward-circle" size={24} color="#007AFF" />
+                    <Ionicons name="arrow-forward-circle" size={24} color={cores.primaria} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -80,36 +82,51 @@ export default function ListaTrabalhosScreen() {
             <Text style={styles.cliente}>{item.clienteNome}</Text>
             <View style={styles.rodape}>
               <View style={styles.dataContainer}>
-                <Ionicons name="calendar-outline" size={13} color="#888" />
+                <Ionicons name="calendar-outline" size={13} color={cores.textoSecundario} />
                 <Text style={styles.data}>{formatarDataCurta(item.dataEntrega ?? item.criadoEm)}</Text>
               </View>
               <Text style={styles.valor}>{formatarMoeda(item.valor)}</Text>
             </View>
           </TouchableOpacity>
         )}
-        ListEmptyComponent={!carregando ? <Text style={styles.vazio}>Nenhum trabalho ainda.</Text> : null}
+        ListEmptyComponent={
+          !carregando ? <EstadoVazio icone="clipboard-outline" texto="Nenhum trabalho ainda." /> : null
+        }
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  filtroContainer: { paddingHorizontal: 16, paddingTop: 12 },
+  container: { flex: 1, backgroundColor: cores.fundoTela },
+  filtroContainer: {
+    paddingHorizontal: espacamento.md,
+    paddingTop: espacamento.sm + 4,
+    maxWidth: larguraMaximaTela,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  lista: {
+    padding: espacamento.md,
+    gap: espacamento.sm + 2,
+    maxWidth: larguraMaximaTela,
+    width: '100%',
+    alignSelf: 'center',
+  },
   linha: {
-    backgroundColor: '#F2F2F7',
-    borderRadius: 12,
+    backgroundColor: cores.fundo,
+    borderRadius: raio.md,
     padding: 14,
     gap: 4,
+    ...sombra,
   },
   topo: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  descricao: { fontSize: 16, fontWeight: '600', flex: 1, marginRight: 8 },
+  descricao: { fontSize: 16, fontWeight: '600', flex: 1, marginRight: 8, color: cores.texto },
   statusContainer: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   avancarBotao: { padding: 2 },
-  cliente: { color: '#666' },
+  cliente: { color: cores.textoSecundario },
   rodape: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 },
   dataContainer: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  data: { color: '#888', fontSize: 12 },
-  valor: { fontWeight: '700' },
-  vazio: { textAlign: 'center', color: '#999', marginTop: 40 },
+  data: { color: cores.textoSecundario, fontSize: 12 },
+  valor: { fontWeight: '700', color: cores.texto },
 });

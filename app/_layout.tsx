@@ -3,6 +3,7 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { AlertaGlobalProvider } from '@/components/AlertaGlobal';
+import { cores } from '@/constants/theme';
 
 function RootLayoutNav() {
   const { user, initializing } = useAuth();
@@ -22,7 +23,7 @@ function RootLayoutNav() {
   if (initializing) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color={cores.primaria} />
       </View>
     );
   }
@@ -44,5 +45,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: cores.fundo,
   },
 });
